@@ -15,10 +15,13 @@ package ec.edu.espe.cargaBD;
 public class main {
     public static void main(String[] args) throws Exception {
        leeEscribeTxt let = new leeEscribeTxt();
+       mysqlMongo mymongo = new mysqlMongo();
        
         let.conectar();
         let.leerDatos();
         //let.desconectar();
+        
+        mymongo.conectarMysqlMongo();
     }
 
 }
