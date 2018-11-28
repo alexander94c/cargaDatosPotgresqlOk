@@ -16,7 +16,7 @@ public class Persona {
     private String apellidos;
     private String nombres;
     private String fechaNacimiento;
-    private int codigoProvincia;
+    private String codigoProvincia;
     private String genero;
     private String estadoCivil;
 
@@ -54,11 +54,11 @@ public class Persona {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public int getCodigoProvincia() {
+    public String getCodigoProvincia() {
         return codigoProvincia;
     }
 
-    public void setCodigoProvincia(int codigoProvincia) {
+    public void setCodigoProvincia(String codigoProvincia) {
         this.codigoProvincia = codigoProvincia;
     }
 

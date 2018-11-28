@@ -5,19 +5,17 @@
  */
 package ec.edu.espe.cargaMysql.modelo;
 
-import com.oracle.webservices.internal.api.message.PropertySet.Property;
-import java.util.Date;
 import java.util.Objects;
 import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Property;
 
 /**
  *
  * @author Alejandro Torres
  */
 
-@Entity(noClassnameStored = true, value = "Usuario")
-
-public class Usuario {
+@Entity(noClassnameStored = true, value = "Persona")
+public class PersonaM {
     @Property("cedula")
     private String cedula;
     
@@ -31,7 +29,7 @@ public class Usuario {
     private String fechaNacimiento;
     
     @Property("codigoProvincia")    
-    private int codProvincia;
+    private String codProvincia;
     
     @Property("genero")    
     private String genero;
@@ -65,7 +63,7 @@ public class Usuario {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Usuario other = (Usuario) obj;
+        final PersonaM other = (PersonaM) obj;
         if (!Objects.equals(this.cedula, other.cedula)) {
             return false;
         }
@@ -98,11 +96,11 @@ public class Usuario {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public int getCodProvincia() {
+    public String getCodProvincia() {
         return codProvincia;
     }
 
-    public void setCodProvincia(int codProvincia) {
+    public void setCodProvincia(String codProvincia) {
         this.codProvincia = codProvincia;
     }
 

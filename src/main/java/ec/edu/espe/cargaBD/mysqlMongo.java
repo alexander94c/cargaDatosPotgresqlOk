@@ -7,7 +7,7 @@ package ec.edu.espe.cargaBD;
 
 import com.mongodb.MongoClient;
 import ec.edu.espe.cargaMysql.modelo.Persona;
-import ec.edu.espe.cargaMysql.modelo.Usuario;
+import ec.edu.espe.cargaMysql.modelo.PersonaM;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -24,18 +24,18 @@ import org.mongodb.morphia.Morphia;
 public class mysqlMongo {
 
     private static Connection conn;
-    private static final String driver = "com.mysql.jdbc.Driver";
-    private static final String user = "root";
-    private static final String password = "";
-    private static final String url = "jdbc:mysql://localhost:3306/pruebamongo";
+    private static final String driver = "org.postgresql.Driver";
+    private static final String user = "postgres";
+    private static final String password = "sql123";
+    private static final String url = "jdbc:postgresql://localhost:5432/taller1";
 
     String sql = "Select * from persona";
     Statement st;
     Date fechaDate = null;
-    Usuario usu = null;
+    PersonaM usu = null;
     Persona per = new Persona();
-    
-    public void conectarMysqlMongo(){
+
+    public void conectarMysqlMongo() {
         try {
             Class.forName(driver);
             conn = (Connection) DriverManager.getConnection(url, user, password);
@@ -46,47 +46,33 @@ public class mysqlMongo {
             Datastore ds = morphia.createDatastore(new MongoClient(), "mysqlMongo");
             ds.ensureIndexes();
 
-            System.out.println("Conexion establecida a Mongo");
-            
             if (conn != null) {
-                System.out.println("Conexion establecida a MySQL");
                 st = conn.createStatement();
-                long start = System.currentTimeMillis();
-                System.out.println("Tiempo inicial: "+start);
 
                 ResultSet rs = st.executeQuery(sql);
                 while (rs.next()) {
-                    //System.out.println(rs.getString(1));
                     per.setCedula(rs.getString(1));
                     per.setApellidos(rs.getString(2));
                     per.setNombres(rs.getString(3));
                     per.setFechaNacimiento(rs.getString(4));
-                    per.setCodigoProvincia(Integer.parseInt(rs.getString(5)));
+                    per.setCodigoProvincia(rs.getString(5));
                     per.setGenero(rs.getString(6));
                     per.setEstadoCivil(rs.getString(7));
-                    
-                    usu = guardarMongo(per.getCedula(), per.getApellidos(), per.getNombres(), per.getFechaNacimiento(), per.getCodigoProvincia(), per.getGenero(), per.getEstadoCivil());
-                    ds.save(usu);
+
+                    PersonaM usuario = new PersonaM();
+                    usuario.setCedula(per.getCedula());
+                    usuario.setApellidos(per.getApellidos());
+                    usuario.setNombres(per.getNombres());
+                    usuario.setFechaNacimiento(per.getFechaNacimiento());
+                    usuario.setCodProvincia(per.getCodigoProvincia());
+                    usuario.setGenero(per.getGenero());
+                    usuario.seteCivil(per.getEstadoCivil());
+                    ds.save(usuario);
                 }
-                long end = System.currentTimeMillis();
-                System.out.println("Tiempo final: " +end);
-                System.out.println("El tiempo que se demoro es: " + (end - start) * 0.001);
+
             }
         } catch (ClassNotFoundException | SQLException e) {
-            System.out.println("Error al conectar " + e);
+            System.out.println("Error al conectar " + e.getMessage());
         }
-    }
-    
-    private static Usuario guardarMongo(String cedula, String apellidos, String nombres, String fechaNacimiento, int codigoProvincia, String genero, String estadoCivil) {
-        Usuario usuario = new Usuario();
-        usuario.setCedula(cedula);
-        usuario.setApellidos(apellidos);
-        usuario.setNombres(nombres);
-        usuario.setFechaNacimiento(fechaNacimiento);
-        usuario.setCodProvincia(codigoProvincia);
-        usuario.setGenero(genero);
-        usuario.seteCivil(estadoCivil);        
-        //System.out.println("Usuario Creado");
-        return usuario;
     }
 }
